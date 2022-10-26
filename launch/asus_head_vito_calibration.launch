@@ -1,12 +1,12 @@
 <launch>
 
 	<arg name="calibration_name" default="asus_head_vito_calib"/>
-	<arg name="use_left_arm" default="true"/>
+	<arg name="use_left_arm" default="false"/>
 	<arg name="asus" default="asus1"/>
 
 	<!-- ASUS TOPICS -->
 	<!-- launch the ar tracker, units in cm, adjust at will -->
-	<arg name="marker_size" default="10" />
+	<arg name="marker_size" default="5" />
 	<arg name="max_new_marker_error" default="0.08" />
 	<arg name="max_track_error" default="0.2" />
 
@@ -26,7 +26,7 @@
 
 	<!-- LOAD ROBOT AND CALIBRATION SETUP -->
 
-	<!-- depends on your configuration, this is for vito -->
+	<!-- depends on your configuration, this is for vito 
 	<group if="$(arg use_left_arm)">
 		<include file="$(find vito_description)/launch/display_for_calibration.launch">
 		    <arg name="left_arm_enabled" default="true"/>
@@ -47,10 +47,18 @@
 		</include>
 			<param name="frame_id" value="camera_rgb_optical_frame" />
 			<param name="ar_marker_frame" value="ar_marker_10" />
-			<param name="child_frame_id" value="vito_anchor" />
+			<param name="child_frame_id" value="right_arm_base_link" />
 			<param name="calibrator_frame" value="calibrator_10"/>
 			<param name="calibration_name" value="$(arg calibration_name)"/>
-			<node name="left_arm_asus_calibrator" pkg="calibration" type="simple_calibrator" respawn="true" output="screen"/>
-	</group>
+			<node name="left_arm_asus_calibrator" pkg="calibration" type="average_calibrator" respawn="true" output="screen"/>
+	</group> -->
+		<include file="$(find franka_visualization)/launch/visual_for_calibration.launch">
+		</include>
+			<param name="frame_id" value="camera_rgb_optical_frame" />
+			<param name="ar_marker_frame" value="ar_marker_10" />
+			<param name="child_frame_id" value="right_arm_base_link" />
+			<param name="calibrator_frame" value="calibrator_10"/>
+			<param name="calibration_name" value="$(arg calibration_name)"/>
+			<node name="left_arm_asus_calibrator" pkg="calibration" type="average_calibrator" respawn="true" output="screen"/>
 
 </launch>
